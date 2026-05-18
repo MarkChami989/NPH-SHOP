@@ -5,6 +5,8 @@ import AlfaMtc from './pages/alfa-mtc.jsx';
 import Printing from './pages/printing.jsx';
 import ItSupport from './pages/it-support.jsx';
 import Accessories from './pages/accessories.jsx';
+import Profile from './pages/Profile.jsx';
+import Register from './pages/login.jsx';
 
 
 export default function App() {
@@ -17,6 +19,9 @@ export default function App() {
         <Route path="/printing" element={<Printing />} />
         <Route path="/it-support" element={<ItSupport />} />
         <Route path="/accessories" element={<Accessories />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/register" element={<Register />} />
+
       
       </Routes>
     </Router>

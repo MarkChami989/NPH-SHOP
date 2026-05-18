@@ -14,7 +14,7 @@ const infoSlides = [
   { icon: '🖨️', title: 'High-Volume Printing Pipeline', text: 'Commercial high-speed laser jets and heavy-duty digital scanners.', path: '/printing' },
   { icon: '💻', title: 'Complete Technical IT Support', text: 'Motherboard-level hardware diagnostics and software restoration pipelines.', path: '/it-support' },
   { icon: '🎧', title: 'Premium Hardware Accessories', text: 'Explore a fully tracked inventory of premium hardware enhancements.', path: '/accessories' },
-  { icon: '🛒', title: 'Our Vision & Management System', text: "A fully dynamic Shop Management System managing live telemetry and inventory.", path: '/about' }
+  { icon: '🛒', title: 'Our Vision & Management System', text: "A fully dynamic Shop Management System managing live telemetry and inventory.", path: '/' }
 ];
 
 const bannerImages = [
@@ -41,7 +41,6 @@ export default function Home() {
     return () => clearInterval(infoTimer);
   }, []);
 
-  // Top banner photo rotation interval (4 seconds)
   useEffect(() => {
     const bannerTimer = setInterval(() => {
       setCurrentBanner((prev) => (prev + 1) % bannerImages.length);
@@ -82,7 +81,7 @@ export default function Home() {
         </div>
 
         <div className="header-actions">
-          <Link to="/settings" className="action-icon-link" title="Settings">⚙️ Settings</Link>
+          <Link to="/profile" className="action-icon-link" title="Settings">⚙️ Settings</Link>
           <Link to="/profile" className="action-icon-link" title="Profile">👤 Profile</Link>
           <Link to="/login" className="login-link">Login</Link>
         </div>
