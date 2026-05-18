@@ -1,7 +1,24 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home.jsx';
+import Login from './pages/login.jsx'; 
+import AlfaMtc from './pages/alfa-mtc.jsx';
+import Printing from './pages/printing.jsx';
+import ItSupport from './pages/it-support.jsx';
+import Accessories from './pages/accessories.jsx';
+
+
 export default function App() {
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>🛒 Welcome to NPH SHOP</h1>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/alfa-mtc" element={<AlfaMtc />} />
+        <Route path="/printing" element={<Printing />} />
+        <Route path="/it-support" element={<ItSupport />} />
+        <Route path="/accessories" element={<Accessories />} />
+      
+      </Routes>
+    </Router>
   );
 }

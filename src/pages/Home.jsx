@@ -1,0 +1,186 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import './Home.css';
+
+const services = [
+  { title: 'Alfa & MTC', description: 'Recharge & SIM services', icon: '📱', path: '/alfa-mtc' },
+  { title: 'Printing', description: 'Print, scan & copy', icon: '🖨️', path: '/printing' },
+  { title: 'IT Support', description: 'Repair & tech help', icon: '💻', path: '/it-support' },
+  { title: 'Accessories', description: 'Cables, cases & more', icon: '🎧', path: '/accessories' },
+];
+
+const infoSlides = [
+  { icon: '📱', title: 'Alfa & MTC Services', text: 'Instant telecom balance distributions and secured server-side terminal connections.', path: '/alfa-mtc' },
+  { icon: '🖨️', title: 'High-Volume Printing Pipeline', text: 'Commercial high-speed laser jets and heavy-duty digital scanners.', path: '/printing' },
+  { icon: '💻', title: 'Complete Technical IT Support', text: 'Motherboard-level hardware diagnostics and software restoration pipelines.', path: '/it-support' },
+  { icon: '🎧', title: 'Premium Hardware Accessories', text: 'Explore a fully tracked inventory of premium hardware enhancements.', path: '/accessories' },
+  { icon: '🛒', title: 'Our Vision & Management System', text: "A fully dynamic Shop Management System managing live telemetry and inventory.", path: '/about' }
+];
+
+const bannerImages = [
+  'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=80', 
+  'https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1588508065123-287b28e013da?auto=format&fit=crop&w=1200&q=80', 
+  'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80'  
+];
+
+export default function Home() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentBanner, setCurrentBanner] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+
+
+  const [activeUsers, setActiveUsers] = useState(16);
+  const [systemPower, setSystemPower] = useState(98.8);
+  const [serverLoad, setServerLoad] = useState(34);
+
+  useEffect(() => {
+    const infoTimer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % infoSlides.length);
+    }, 5000);
+    return () => clearInterval(infoTimer);
+  }, []);
+
+  // Top banner photo rotation interval (4 seconds)
+  useEffect(() => {
+    const bannerTimer = setInterval(() => {
+      setCurrentBanner((prev) => (prev + 1) % bannerImages.length);
+    }, 4000);
+    return () => clearInterval(bannerTimer);
+  }, []);
+
+  
+  useEffect(() => {
+    const statsInterval = setInterval(() => {
+      setActiveUsers(() => Math.floor(Math.random() * (19 - 13 + 1)) + 13);
+      setSystemPower(() => parseFloat((98 + Math.random()).toFixed(1)));
+      setServerLoad(() => Math.floor(Math.random() * (38 - 25 + 1)) + 25);
+    }, 4000);
+    return () => clearInterval(statsInterval);
+  }, []);
+
+  const slide = infoSlides[currentSlide];
+
+  return (
+    <div className="container">
+      
+      
+      <header className="header animate-fade-down">
+        <h1 className="logo">
+          <span className="logo-icon">🛒</span> NPH SHOP
+        </h1>
+
+        <div className="search-container">
+          <input 
+            type="text" 
+            placeholder="Search products, services, codes..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+          <button className="search-btn">🔍</button>
+        </div>
+
+        <div className="header-actions">
+          <Link to="/settings" className="action-icon-link" title="Settings">⚙️ Settings</Link>
+          <Link to="/profile" className="action-icon-link" title="Profile">👤 Profile</Link>
+          <Link to="/login" className="login-link">Login</Link>
+        </div>
+      </header>
+
+     
+      <section className="hero-banner-container animate-fade-in">
+        <div 
+          className="hero-banner-slide" 
+          style={{ backgroundImage: `url(${bannerImages[currentBanner]})` }}
+          key={currentBanner}
+        >
+          <div className="banner-overlay">
+            <h2 className="banner-text">CHOOSE THE SERVICE THAT SPEAKS YOUR STYLE!</h2>
+            <p className="banner-subtext">Netronics Power Hub Premium Terminal</p>
+          </div>
+        </div>
+        <div className="banner-dots">
+          {bannerImages.map((_, idx) => (
+            <span key={idx} className={`banner-dot ${idx === currentBanner ? 'active' : ''}`} />
+          ))}
+        </div>
+      </section>
+
+      <section className="stats-bar animate-fade-down">
+        <div className="stat-item">
+          <span className="stat-indicator online"></span>
+          <div className="stat-data">
+            <span className="stat-value">{activeUsers}</span>
+            <span className="stat-label">Active Terminals</span>
+          </div>
+        </div>
+        <div className="stat-item">
+          <span className="stat-indicator power"></span>
+          <div className="stat-data">
+            <span className="stat-value">{systemPower}%</span>
+            <span className="stat-label">System Performance</span>
+          </div>
+        </div>
+        <div className="stat-item">
+          <span className="stat-indicator traffic"></span>
+          <div className="stat-data">
+            <span className="stat-value">{serverLoad} req/s</span>
+            <span className="stat-label">Live Sync Rate</span>
+          </div>
+        </div>
+      </section>
+
+    
+      <main className="grid">
+        {services.map((s, index) => (
+          <Link 
+            to={s.path} 
+            key={s.title} 
+            className="card animate-fade-in"
+            style={{ animationDelay: `${index * 0.1}s` }} 
+          >
+            <div className="card-icon">{s.icon}</div>
+            <h2 className="card-title">{s.title}</h2>
+            <p className="card-description">{s.description}</p>
+          </Link>
+        ))}
+      </main>
+
+      <section className="about-section-wrapper">
+        <div className="about-section active-slide-box" key={currentSlide}>
+          <div className="info-header-row">
+            <div className="logo-badge-container">
+              <span className="info-slide-logo">{slide.icon}</span>
+              <h2 className="about-title">INFO Overview</h2>
+            </div>
+            <span className="live-pulse-dot"></span>
+          </div>
+          
+          <div className="about-content">
+            <p className="about-p">
+              <strong>{slide.title}:</strong> {slide.text}
+            </p>
+          </div>
+          
+          <div className="action-row">
+            <Link to={slide.path} className="direct-entry-btn">
+              Open Section 
+            </Link>
+          </div>
+        </div>
+        
+        <div className="dots-navigation">
+          {infoSlides.map((_, index) => (
+            <button
+              key={index}
+              className={`nav-dot ${index === currentSlide ? 'active' : ''}`}
+              onClick={() => setCurrentSlide(index)}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
