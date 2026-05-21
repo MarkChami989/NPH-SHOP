@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './alfa-mtc.css';
 
 const alfaBundles = [
@@ -26,24 +26,25 @@ export default function AlfaMtc() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState(''); // New state for login/validation errors
+  const [errorMessage, setErrorMessage] = useState(''); 
   const [selectedCardId, setSelectedCardId] = useState(null);
+  
+  const navigate = useNavigate();
 
-  // SIMULATION ONLY: Change this to true/false to test the system check
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const handleRecharge = async (id, price, type) => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const storedUsername = localStorage.getItem('username');
 
-  const handleRecharge = (id, price, type) => {
     setErrorMessage('');
     setSuccessMessage('');
 
-    // CRITICAL SECURITY MODEL CHECK: Abel ma ekbos recharge, b-shouf eza login!
-    if (!isLoggedIn) {
-      setErrorMessage('⚠️ Access Denied: You must be Logged In to perform recharges! Please log in first.');
-      window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scrolls to warning alert box
+    if (!isLoggedIn || !storedUsername) {
+      setErrorMessage('⚠️ Access Denied: No active session found. Please log in first.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
-    if (!phoneNumber || phoneNumber.length < 8) {
+    if (!phoneNumber || phoneNumber.trim().length < 8) {
       alert('Please enter a valid 8-digit phone number first! / رجاءً أدخل رقم الهاتف أولاً');
       return;
     }
@@ -51,12 +52,38 @@ export default function AlfaMtc() {
     setSelectedCardId(id);
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-      setSelectedCardId(null);
+    try {
+      // 🚀 2. SEND THE RECHARGE TRANSACTION LOG STRAIGHT TO NODE SERVER (MYSQL)
+      const response = await fetch('http://localhost:5000/api/recharge', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: storedUsername,
+          phoneNumber: phoneNumber,
+          provider: type, // 'Alfa' aw 'Touch'
+          price: price
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to dispatch reload sequence to server db.');
+      }
+
+      // 3. Success Feedback dynamic clear layout
       setSuccessMessage(`Successfully processed ${type} ${price} recharge for number: ${phoneNumber}!`);
       setPhoneNumber('');
-    }, 2000);
+      
+    } catch (err) {
+      setErrorMessage(`❌ Gateway Fail: ${err.message}`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } finally {
+      setLoading(false);
+      setSelectedCardId(null);
+    }
   };
 
   return (
@@ -67,18 +94,11 @@ export default function AlfaMtc() {
         <Link to="/" className="back-btn-link">← Back to Dashboard</Link>
         <h2 className="portal-main-title">NPH Telecom Gateway</h2>
         
-        {/* Testing Utility Controller Switch to let you toggle Login state easily */}
+        {/* Real Status Track indicators without manual toggle switches */}
         <div className="test-auth-toggle">
-          <span className={`status-text ${isLoggedIn ? 'logged-in' : 'logged-out'}`}>
-            Status: {isLoggedIn ? '👤 Logged In' : '❌ Guest Mode'}
+          <span className={`status-text ${localStorage.getItem('isLoggedIn') === 'true' ? 'logged-in' : 'logged-out'}`}>
+            Operator: {localStorage.getItem('isLoggedIn') === 'true' ? `👤 ${localStorage.getItem('username')}` : '❌ Disconnected'}
           </span>
-          <button 
-            type="button" 
-            onClick={() => setIsLoggedIn(!isLoggedIn)} 
-            className="toggle-auth-btn"
-          >
-            {isLoggedIn ? 'Simulate Logout' : 'Simulate Login'}
-          </button>
         </div>
       </div>
 
@@ -93,6 +113,7 @@ export default function AlfaMtc() {
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             className="phone-main-input"
+            disabled={loading}
           />
         </div>
       </div>
@@ -102,7 +123,7 @@ export default function AlfaMtc() {
         <div className="gateway-error-alert">
           <div className="error-alert-content">
             <p>{errorMessage}</p>
-            <Link to="/login" className="alert-login-link-btn">Go to Login Page ➔</Link>
+            {localStorage.getItem('isLoggedIn') !== 'true' && <Link to="/login" className="alert-login-link-btn">Go to Login Page ➔</Link>}
           </div>
         </div>
       )}

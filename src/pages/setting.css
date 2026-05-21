@@ -1,0 +1,184 @@
+.setting-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8fafc;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.setting-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 480px;
+  padding: 2.5rem;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+}
+
+.setting-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.setting-logo {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #1e293b;
+  margin: 0 0 0.4rem 0;
+}
+
+.setting-subtitle {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.setting-success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.setting-section {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.setting-section:last-of-type {
+  border-bottom: none;
+}
+
+.setting-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 1rem 0;
+}
+
+.setting-group {
+  margin-bottom: 1rem;
+}
+
+.setting-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.4rem;
+}
+
+.setting-input {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #1e293b;
+  background: #f8fafc;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.setting-input:focus {
+  border-color: #6366f1;
+  background: #fff;
+}
+
+.setting-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  margin-bottom: 0.75rem;
+}
+
+.setting-info-label {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.setting-info-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.setting-profile-link {
+  display: block;
+  font-size: 0.85rem;
+  color: #6366f1;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.setting-profile-link:hover {
+  text-decoration: underline;
+}
+
+.setting-save-btn {
+  width: 100%;
+  padding: 0.85rem;
+  background: #1e293b;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 1.25rem;
+  transition: background 0.2s;
+}
+
+.setting-save-btn:hover {
+  background: #334155;
+}
+
+.setting-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.setting-back-link {
+  font-size: 0.85rem;
+  color: #6366f1;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.setting-back-link:hover {
+  text-decoration: underline;
+}
+
+.setting-logout-btn {
+  background: none;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.setting-logout-btn:hover {
+  background: #fef2f2;
+}

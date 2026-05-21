@@ -10,10 +10,11 @@ export default function Login() {
   
   const navigate = useNavigate();
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
+    // 1. Validation basic check
     if (!username || !password) {
       setError('⚠️ Please enter both your username and password.');
       return;
@@ -21,66 +22,63 @@ export default function Login() {
 
     setLoading(true);
 
-    // Simulate secure network authentication delay
-    setTimeout(() => {
-      setLoading(false);
-      
-      // Local authentication check logic
-      if (username.toLowerCase() === 'admin' && password === 'nph123') {
-        // Save active login state tokens
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', username);
-        
-        // --- 🔍 CONDITIONAL IF/ELSE PROFILE LOCK ---
-        const existingProfile = localStorage.getItem('userProfile');
-        
-        if (existingProfile) {
-          // ✅ ELSE: Deja moujoud! Mafi creation men jdid abadan.
-          // Byirja3 deghre 3al main dashboard node perfectly.
-          navigate('/');
-        } else {
-          // 🆕 IF: Fresh account with NO profile!
-          // Bnikhla2 l-profile instantly ma3 l-Username wl Password li halla2 katabhon!
-          const newUserAccount = {
-            username: username.toLowerCase(),
-            password: password // Takes 'nph123' dynamically
-          };
+    try {
+      // 🚀 2. Fetch API call directly to your real backend server (Soon to be active)
+      // Note: Eza 3am testa3mel l-telephone, beddal localhost la-IP l-laptop (masalan: 192.168.1.X:5000)
+      const response = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-          const forcedBlankProfile = {
-            id: 'NPH-01',
-            email: '',    // Left empty for later configuration
-            number: '',   // Left empty
-            location: '', // Left empty
-            wishlistCount: 0
-          };
+      const data = await response.json();
 
-          // Save both objects instantly to cache storage so Profile.jsx can read them
-          localStorage.setItem('userAccount', JSON.stringify(newUserAccount));
-          localStorage.setItem('userProfile', JSON.stringify(forcedBlankProfile));
-          
-          // Redirect straight to profile setup so they can see their credentials and fill the rest
-          navigate('/profile?forcedSetup=true');
-        }
-      } else {
-        setError('❌ Invalid credentials! Try admin / nph123 for testing.');
+      // 3. Eza l-backend rej3it error (user mesh moujoud aw password ghalat)
+      if (!response.ok) {
+        throw new Error(data.error || 'Authentication failed');
       }
-    }, 1500);
+
+      // 4. Success Login! Sayyaf data bl-localStorage seamlessly metel ma baddak
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('username', data.user.username);
+      
+      const userProfile = {
+        id: data.user.username,
+        email: data.user.email,
+        number: data.user.number,
+        location: data.user.location,
+        wishlistCount: data.user.wishlistCount || 0
+      };
+      
+      localStorage.setItem('userProfile', JSON.stringify(userProfile));
+      
+      // 5. Land flawlessly on the Home Screen!
+      navigate('/');
+
+    } catch (err) {
+      // Show database / validation error live on screen banner
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="login-page-wrapper animate-fade-in">
       <div className="login-card-container">
         
-        {/* Brand Header */}
+        {/* Brand Terminal Header */}
         <div className="login-brand-header">
           <h1 className="login-logo">🛒 NPH SHOP</h1>
           <p className="login-subtitle">Management System Terminal Access</p>
         </div>
 
-        {/* Error Notification Alert */}
+        {/* Error Notification Alert Banner */}
         {error && <div className="login-error-banner">{error}</div>}
 
-        {/* Form Inputs Grid */}
+        {/* Core Input Credentials Fields */}
         <form onSubmit={handleLoginSubmit} className="login-form-element">
           <div className="login-input-group">
             <label className="login-input-label">Username / اسم المستخدم</label>
@@ -91,6 +89,7 @@ export default function Login() {
               onChange={(e) => setUsername(e.target.value)}
               className="login-field-input"
               disabled={loading}
+              required
             />
           </div>
 
@@ -103,6 +102,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               className="login-field-input"
               disabled={loading}
+              required
             />
           </div>
 
@@ -111,7 +111,18 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Optional Back Navigation links footer */}
+        {/* --- 🛠️ LINKED SIGN IN REGISTRATION ACTION BAR --- */}
+        <div className="login-registration-gate">
+          <p className="login-gate-text">New terminal user on this machine?</p>
+          <button 
+            type="button" 
+            className="login-signin-action-btn"
+            onClick={() => navigate('/register')}
+          >
+            Create Account & Sign In 👤
+          </button>
+        </div>
+
         <div className="login-card-footer">
           <Link to="/" className="cancel-return-link">Cancel & Exit Terminal</Link>
         </div>

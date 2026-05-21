@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Home.css';
 
 const services = [
@@ -28,6 +28,15 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentBanner, setCurrentBanner] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  const username = localStorage.getItem('username') || 'User';
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
+    localStorage.removeItem('userProfile');
+    navigate('/login');
+  };
 
 
   const [activeUsers, setActiveUsers] = useState(16);
@@ -81,9 +90,9 @@ export default function Home() {
         </div>
 
         <div className="header-actions">
-          <Link to="/profile" className="action-icon-link" title="Settings">⚙️ Settings</Link>
-          <Link to="/profile" className="action-icon-link" title="Profile">👤 Profile</Link>
-          <Link to="/login" className="login-link">Login</Link>
+          <Link to="/setting" className="action-icon-link" title="Settings">⚙️ Settings</Link>
+          <Link to="/profile" className="action-icon-link" title="Profile">👤 {username}</Link>
+          <button onClick={handleLogout} className="login-link" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>Logout</button>
         </div>
       </header>
 

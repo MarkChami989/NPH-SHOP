@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(Rename-Item \"c:\\\\Users\\\\mark\\\\Desktop\\\\NPH SHOP\\\\src\\\\pages\\\\Home.CSS\" \"home.css\")"
+      "PowerShell(Rename-Item \"c:\\\\Users\\\\mark\\\\Desktop\\\\NPH SHOP\\\\src\\\\pages\\\\Home.CSS\" \"home.css\")",
+      "Bash(curl -s http://localhost:5000/)",
+      "Bash(curl -s -X POST http://localhost:5000/api/register -H \"Content-Type: application/json\" -d \"{\\\\\"username\\\\\":\\\\\"testuser\\\\\",\\\\\"password\\\\\":\\\\\"123456\\\\\",\\\\\"email\\\\\":\\\\\"test@test.com\\\\\",\\\\\"number\\\\\":\\\\\"70000000\\\\\",\\\\\"location\\\\\":\\\\\"Beirut\\\\\"}\")"
     ]
   }
 }

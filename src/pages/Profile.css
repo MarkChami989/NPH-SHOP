@@ -40,6 +40,27 @@
   font-weight: 500;
 }
 
+/* 🔥 COUPLING FIXED: Loading & Error Banners */
+.profile-loading-banner {
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+  color: #64748b;
+  font-weight: 600;
+  text-align: center;
+}
+
+.profile-error-banner {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
 .profile-success-banner {
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
@@ -99,6 +120,24 @@
   border: 1px solid #e2e8f0;
 }
 
+/* 🔥 Highlight styles for Username main card view rows */
+.profile-info-row-highlight {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.profile-info-label-highlight {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1d4ed8;
+}
+
+.profile-info-value-highlight {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
 .profile-info-label {
   font-size: 0.82rem;
   font-weight: 700;
@@ -111,11 +150,38 @@
   color: #1e293b;
 }
 
+/* 🔥 Wrapper layout for main control buttons */
+.profile-actions-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
 .profile-edit-form {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
   margin-bottom: 1.75rem;
+}
+
+/* 🔥 Custom container grouping inside Edit mode form */
+.profile-security-section {
+  background: #f8fafc;
+  padding: 1.25rem;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-section-title {
+  margin: 0 0 0.25rem 0;
+  color: #1e293b;
+  font-size: 0.95rem;
+  font-weight: 700;
 }
 
 .profile-input-group {
@@ -156,7 +222,6 @@
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-  margin-bottom: 0.5rem;
   transition: background 0.2s, transform 0.1s;
 }
 
@@ -173,16 +238,35 @@
   color: #64748b;
   border: 1px solid #e2e8f0;
   width: 100%;
-  padding: 0.65rem;
+  padding: 0.75rem;
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
+  box-sizing: border-box;
 }
 
 .profile-cancel-btn:hover {
   background: #f1f5f9;
+}
+
+/* 🔥 Clean standalone style rules for the Delete layout trigger button */
+.profile-delete-btn {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  width: 100%;
+}
+
+.profile-delete-btn:hover {
+  background-color: #dc2626;
 }
 
 .profile-card-footer {
