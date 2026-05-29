@@ -42,3 +42,13 @@ CREATE TABLE alfa_mtc_orders (
     status VARCHAR(20) DEFAULT 'Completed',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+DROP TABLE IF EXISTS terminal_activities;
+CREATE TABLE terminal_activities (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) DEFAULT 'system',
+    type VARCHAR(50) NOT NULL,
+    details VARCHAR(255) NOT NULL,
+    target VARCHAR(100) DEFAULT 'N/A',
+    status VARCHAR(50) DEFAULT 'success',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

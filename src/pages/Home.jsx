@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import logo from './photo/logo-01.png';
 import './Home.css';
 
 const services = [
@@ -75,7 +76,7 @@ export default function Home() {
       
       <header className="header animate-fade-down">
         <h1 className="logo">
-          <span className="logo-icon">🛒</span> NPH SHOP
+<img src={logo} alt="NPH Logo" className="logo-image" /> 
         </h1>
 
         <div className="search-container">
@@ -90,8 +91,9 @@ export default function Home() {
         </div>
 
         <div className="header-actions">
-          <Link to="/setting" className="action-icon-link" title="Settings">⚙️ Settings</Link>
+          <Link to="/setting" className="action-icon-link" title="Settings">⚙️</Link>
           <Link to="/profile" className="action-icon-link" title="Profile">👤 {username}</Link>
+          <Link to="/menu" className="action-icon-link" title="Activity Log">📋</Link>
           <button onClick={handleLogout} className="login-link" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>Logout</button>
         </div>
       </header>
@@ -105,7 +107,7 @@ export default function Home() {
         >
           <div className="banner-overlay">
             <h2 className="banner-text">CHOOSE THE SERVICE THAT SPEAKS YOUR STYLE!</h2>
-            <p className="banner-subtext">Netronics Power Hub Premium Terminal</p>
+            <p className="banner-subtext">Netronics Power Hub Premium</p>
           </div>
         </div>
         <div className="banner-dots">
@@ -160,7 +162,7 @@ export default function Home() {
           <div className="info-header-row">
             <div className="logo-badge-container">
               <span className="info-slide-logo">{slide.icon}</span>
-              <h2 className="about-title">INFO Overview</h2>
+              <h2 className="about-title">Overview</h2>
             </div>
             <span className="live-pulse-dot"></span>
           </div>

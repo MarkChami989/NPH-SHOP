@@ -96,6 +96,12 @@ app.post('/api/login', async (req, res) => {
       return res.status(401).json({ success: false, error: '❌ Invalid username or password!' });
     }
 
+    // Log login activity
+    await conn.execute(
+      'INSERT INTO terminal_activities (username, type, details, target, status) VALUES (?, ?, ?, ?, ?)',
+      [user.username, 'Login', 'User session started', 'Web Terminal', 'success']
+    );
+
     conn.release();
 
     console.log('----------------------------------------------------');
@@ -122,7 +128,7 @@ app.post('/api/login', async (req, res) => {
 });
 
 // =========================================================================
-// 🔍 ROUTE 3: GET USER PROFILE DATA FROM MYSQL (GET) -> 🔥 COUPLING LINK FIXED!
+// 🔍 ROUTE 3: GET USER PROFILE DATA FROM MYSQL (GET)
 // =========================================================================
 app.get('/api/user/:username', async (req, res) => {
   const { username } = req.params;
@@ -130,7 +136,6 @@ app.get('/api/user/:username', async (req, res) => {
   try {
     const conn = await pool.getConnection();
 
-    // Bin-jib kel l-data dynamic m3a l-password kermel Edit state logic matches perfectly
     const [results] = await conn.execute(
       'SELECT nph_id, username, password, email, number, location, wishlistCount FROM users WHERE username = ?',
       [username.toLowerCase()]
@@ -213,7 +218,7 @@ app.delete('/api/user/delete/:username', async (req, res) => {
 });
 
 // =========================================================================
-// 📱 ROUTE 6: COMMIT RECHARGE TRANSACTION TO MYSQL (POST)
+// 📱 ROUTE 6: COMMIT RECHARGE TRANSACTION TO MYSQL (POST) + AUTO ACTIVITY LOG
 // =========================================================================
 app.post('/api/recharge', async (req, res) => {
   const { username, phoneNumber, provider, price } = req.body;
@@ -251,6 +256,12 @@ app.post('/api/recharge', async (req, res) => {
     await conn.execute(
       'INSERT INTO alfa_mtc_orders (order_id, username, phone_number, provider, price, status) VALUES (?, ?, ?, ?, ?, ?)',
       [orderId, username.toLowerCase().trim(), phoneNumber.trim(), provider.trim(), price.trim(), 'Completed']
+    );
+
+    // 🔥 AUTOMATIC INJECT TO THE LIVE TERMINAL LOGS TABLE (ADDED)
+    await conn.execute(
+      'INSERT INTO terminal_activities (username, type, details, target, status) VALUES (?, ?, ?, ?, ?)',
+      [username.toLowerCase().trim(), 'Alfa & MTC', `${provider} - ${price}`, phoneNumber, 'success']
     );
 
     conn.release();
@@ -292,6 +303,106 @@ app.get('/api/orders/:username', async (req, res) => {
   } catch (err) {
     console.error('❌ Fetch orders error:', err.message);
     res.status(500).json({ success: false, error: '❌ Server error fetching order history.' });
+  }
+});
+
+// =========================================================================
+// 📋 ROUTE 8: GET ALL TERMINAL ACTIVITIES FROM DB (GET) -> Added for Menu.jsx
+// =========================================================================
+app.get('/api/activities', async (req, res) => {
+  try {
+    const conn = await pool.getConnection();
+    const [rows] = await conn.execute(`
+      SELECT id, username, type, details, target, status,
+      DATE_FORMAT(created_at, '%m/%d/%Y, %h:%i %p') AS timestamp
+      FROM terminal_activities
+      ORDER BY id DESC LIMIT 50
+    `);
+    conn.release();
+    res.json(rows);
+  } catch (err) {
+    console.error('❌ Fetch activities error:', err.message);
+    res.status(500).json({ success: false, error: 'Server error retrieving logs.' });
+  }
+});
+
+// =========================================================================
+// 📥 ROUTE 9: LOG MANUALLY CHOSEN TERMINAL ACTIVITY (POST) -> Added for custom items
+// =========================================================================
+app.post('/api/activities', async (req, res) => {
+  const { type, details, target, username } = req.body;
+
+  if (!type || !details) {
+    return res.status(400).json({ success: false, error: 'Missing log fields.' });
+  }
+
+  try {
+    const conn = await pool.getConnection();
+    const [result] = await conn.execute(
+      'INSERT INTO terminal_activities (username, type, details, target, status) VALUES (?, ?, ?, ?, ?)',
+      [username || 'system', type, details, target || 'N/A', 'success']
+    );
+
+    const [newRow] = await conn.execute(
+      "SELECT id, username, type, details, target, status, DATE_FORMAT(created_at, '%m/%d/%Y, %h:%i %p') AS timestamp FROM terminal_activities WHERE id = ?",
+      [result.insertId]
+    );
+    conn.release();
+
+    res.status(201).json({
+      success: true,
+      log: newRow[0]
+    });
+  } catch (err) {
+    console.error('❌ Create activity log error:', err.message);
+    res.status(500).json({ success: false, error: 'Server error committing log node.' });
+  }
+});
+
+// =========================================================================
+// 📊 ROUTE 10: GET USER ACTIVITY REPORT SUMMARY (GET) -> Per-user breakdown
+// =========================================================================
+app.get('/api/report', async (req, res) => {
+  try {
+    const conn = await pool.getConnection();
+    const [report] = await conn.execute(`
+      SELECT
+        username,
+        COUNT(*) AS total_actions,
+        SUM(CASE WHEN type = 'Alfa & MTC' THEN 1 ELSE 0 END) AS recharge_count,
+        SUM(CASE WHEN type = 'Login' THEN 1 ELSE 0 END) AS login_count,
+        MAX(created_at) AS last_activity
+      FROM terminal_activities
+      GROUP BY username
+      ORDER BY total_actions DESC
+    `);
+    conn.release();
+    res.json({ success: true, report });
+  } catch (err) {
+    console.error('❌ Report fetch error:', err.message);
+    res.status(500).json({ success: false, error: 'Server error retrieving report.' });
+  }
+});
+
+// =========================================================================
+// 📊 ROUTE 11: GET DETAILED ACTIVITY LOG FOR ONE USER (GET)
+// =========================================================================
+app.get('/api/report/:username', async (req, res) => {
+  const { username } = req.params;
+  try {
+    const conn = await pool.getConnection();
+    const [activities] = await conn.execute(`
+      SELECT id, username, type, details, target, status,
+      DATE_FORMAT(created_at, '%m/%d/%Y, %h:%i %p') AS timestamp
+      FROM terminal_activities
+      WHERE username = ?
+      ORDER BY id DESC LIMIT 100
+    `, [username.toLowerCase()]);
+    conn.release();
+    res.json({ success: true, activities });
+  } catch (err) {
+    console.error('❌ User report fetch error:', err.message);
+    res.status(500).json({ success: false, error: 'Server error retrieving user activity.' });
   }
 });
 

@@ -1,12 +1,13 @@
-/* --- Login Layout Context settings --- */
+/* --- Login Layout — NPH logo theme --- */
 :root {
-  --primary-blue: #3b82f6;
-  --primary-hover: #2563eb;
-  --text-dark: #1e293b;
-  --text-muted: #64748b;
-  --bg-light-grey: #f8fafc; /* Matches image_cdd029.jpg background */
+  --green: #1f6b3b;
+  --green-deep: #14532d;
+  --green-soft: #2e8b57;
+  --orange: #c2562a;
+  --orange-hover: #a8461f;
+  --bg-gradient: linear-gradient(135deg, #f4f8f2 0%, #e6efe3 100%);
   --card-bg-white: #ffffff;
-  --border-light: #e2e8f0;
+  --border-light: #d9e4d5;
 }
 
 .login-page-wrapper {
@@ -14,7 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-light-grey);
+  background: var(--bg-gradient);
   padding: 1.5rem;
   box-sizing: border-box;
   font-family: 'Inter', system-ui, sans-serif;
@@ -28,7 +29,7 @@
   padding: 2.5rem;
   border-radius: 16px;
   border: 1px solid var(--border-light);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 10px 25px rgba(31, 107, 59, 0.06);
   box-sizing: border-box;
 }
 
@@ -41,13 +42,13 @@
 .login-logo {
   font-size: 1.8rem;
   font-weight: 900;
-  color: var(--text-dark);
+  color: var(--green);
   margin: 0 0 0.4rem 0;
   letter-spacing: -0.5px;
 }
 
 .login-subtitle {
-  color: var(--text-muted);
+  color: var(--green-soft);
   font-size: 0.9rem;
   margin: 0;
   font-weight: 500;
@@ -70,27 +71,30 @@
 .login-input-label {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--text-dark);
+  color: var(--green-deep);
 }
 
 .login-field-input {
   width: 100%;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border-light);
   padding: 0.7rem 1rem;
   border-radius: 8px;
   font-size: 0.95rem;
   outline: none;
   box-sizing: border-box;
-  transition: border-color 0.2s ease;
+  color: var(--green-deep);
+  background: #f4f8f2;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .login-field-input:focus {
-  border-color: var(--primary-blue);
+  border-color: var(--green-soft);
+  background: #fff;
 }
 
-/* Master Action Submit Button (Matches the exact blue header buttons) */
+/* Master Action Submit Button */
 .login-submit-action-btn {
-  background: var(--primary-blue);
+  background: var(--orange);
   color: #ffffff;
   border: none;
   width: 100%;
@@ -99,13 +103,13 @@
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 12px rgba(194, 86, 42, 0.2);
   margin-top: 0.5rem;
   transition: background 0.2s, transform 0.1s;
 }
 
 .login-submit-action-btn:hover {
-  background: var(--primary-hover);
+  background: var(--orange-hover);
 }
 
 .login-submit-action-btn:active {
@@ -141,14 +145,14 @@
 
 .cancel-return-link {
   text-decoration: none;
-  color: var(--text-muted);
+  color: var(--green-soft);
   font-size: 0.85rem;
   font-weight: 600;
   transition: color 0.2s;
 }
 
 .cancel-return-link:hover {
-  color: #ef4444;
+  color: var(--orange);
 }
 
 /* Simple Loading entry effect wrapper */
@@ -160,23 +164,24 @@
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
 /* Registration Gate Section Rules */
 .login-registration-gate {
   margin-top: 1.5rem;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--border-light);
   padding-top: 1.25rem;
   text-align: center;
 }
 
 .login-gate-text {
   font-size: 0.85rem;
-  color: #64748b;
+  color: var(--green-soft);
   margin: 0 0 0.75rem 0;
 }
 
 .login-signin-action-btn {
   width: 100%;
-  background-color: #3b82f6;
+  background-color: var(--green);
   color: #ffffff;
   border: none;
   padding: 0.75rem;
@@ -188,5 +193,5 @@
 }
 
 .login-signin-action-btn:hover {
-  background-color: #2563eb;
+  background-color: var(--green-deep);
 }
