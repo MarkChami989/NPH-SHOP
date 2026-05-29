@@ -23,43 +23,74 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // 🚀 2. Fetch API call directly to your real backend server (Soon to be active)
-      // Note: Eza 3am testa3mel l-telephone, beddal localhost la-IP l-laptop (masalan: 192.168.1.X:5000)
+      // 🚀 2. Fetch API call directly to your real backend server
       const response = await fetch('http://localhost:5000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ 
+          username: username.toLowerCase(), 
+          password: password 
+        }),
       });
 
       const data = await response.json();
 
       // 3. Eza l-backend rej3it error (user mesh moujoud aw password ghalat)
-      if (!response.ok) {
-        throw new Error(data.error || 'Authentication failed');
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || data.error || 'Invalid credentials!');
       }
 
-      // 4. Success Login! Sayyaf data bl-localStorage seamlessly metel ma baddak
+      // 4. Success Login! Save secure JWT token and baseline session details
+      localStorage.setItem('token', data.token);
       localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('username', data.user.username);
+      localStorage.setItem('username', username.toLowerCase());
       
-      const userProfile = {
-        id: data.user.username,
-        email: data.user.email,
-        number: data.user.number,
-        location: data.user.location,
-        wishlistCount: data.user.wishlistCount || 0
-      };
+      // --- 🔍 CONDITIONAL IF/ELSE PROFILE LOCK ---
+      const existingProfile = localStorage.getItem('userProfile');
       
-      localStorage.setItem('userProfile', JSON.stringify(userProfile));
-      
-      // 5. Land flawlessly on the Home Screen!
-      navigate('/');
+      if (existingProfile) {
+        // ✅ ELSE: Deja moujoud! Mafi creation men jdid abadan.
+        const updatedProfile = {
+          id: data.user?.username || username.toLowerCase(),
+          email: data.user?.email || '',
+          number: data.user?.number || '',
+          location: data.user?.location || '',
+          wishlistCount: data.user?.wishlistCount || 0
+        };
+        localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+        
+        // Byirja3 deghre 3al main dashboard node perfectly.
+        navigate('/');
+      } else {
+        // 🆕 IF: Fresh account with NO profile!
+        // Bnikhla2 l-profile instantly ma3 l-Username wl Password li halla2 katabhon!
+        const newUserAccount = {
+          username: username.toLowerCase(),
+          password: password 
+        };
+
+        const forcedBlankProfile = {
+          id: data.user?.username || username.toLowerCase(),
+          email: data.user?.email || '',
+          number: data.user?.number || '',
+          location: data.user?.location || '',
+          wishlistCount: data.user?.wishlistCount || 0
+        };
+
+        // Save both objects instantly to cache storage so Profile.jsx can read them
+        localStorage.setItem('userAccount', JSON.stringify(newUserAccount));
+        localStorage.setItem('userProfile', JSON.stringify(forcedBlankProfile));
+        
+        // Redirect straight to profile setup so they can see their credentials and fill the rest
+        navigate('/profile?forcedSetup=true');
+      }
 
     } catch (err) {
       // Show database / validation error live on screen banner
-      setError(err.message);
+      console.error("Backend Connection Error:", err);
+      setError(`❌ ${err.message || 'Connection Error! Make sure your Node.js server is running.'}`);
     } finally {
       setLoading(false);
     }

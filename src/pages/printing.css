@@ -1,0 +1,271 @@
+/* Container Layout */
+.printing-container {
+  padding: 50px 20px;
+  max-width: 1300px;
+  margin: 0 auto;
+  font-family: system-ui, sans-serif;
+  background-color: #f8fafc;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Header Elements */
+.printing-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.badge {
+  background-color: #e0e7ff;
+  color: #4f46e5;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.title {
+  color: #0f172a;
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin: 15px 0 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.subtitle {
+  color: #475569;
+  font-size: 1.15rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Navigation Tabs */
+.tabs-container {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.tab-button {
+  padding: 10px 24px;
+  border-radius: 9999px;
+  border: none;
+  background-color: #ffffff;
+  color: #475569;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+}
+
+.tab-button.active {
+  background-color: #111827;
+  color: #ffffff;
+}
+
+/* Grid Matrix */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 35px;
+}
+
+/* Card Structures */
+.device-card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transform: translateY(0px) scale(1);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.device-card.hovered {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Image Utilities */
+.image-wrapper {
+  height: 220px;
+  overflow: hidden;
+  background-color: #f1f5f9;
+  position: relative;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.5s ease;
+}
+
+.card-image.zoomed {
+  transform: scale(1.06);
+}
+
+/* Status Stocks */
+.status-badge {
+  position: absolute;
+  top: '15px';
+  right: '15px';
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.status-badge.in-stock {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.low-stock {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.on-order {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* Card Body Content */
+.card-content {
+  padding: 26px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.device-type {
+  font-size: 0.8rem;
+  color: #4f46e5;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.device-name {
+  font-size: 1.35rem;
+  color: #0f172a;
+  margin: 10px 0 16px 0;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.specs-list {
+  padding-left: 0;
+  list-style: none;
+  margin: 0 0 26px 0;
+}
+
+.spec-item {
+  color: #334155;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkmark {
+  color: #10b981;
+  font-weight: bold;
+}
+
+/* Action Trigger Buttons */
+.configure-btn {
+  width: 100%;
+  background-color: #111827;
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: none;
+  transition: all 0.2s ease;
+}
+
+.configure-btn.shadowed {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Modal Engine Overlays */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 24px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.modal-icon {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+}
+
+.modal-title {
+  color: #0f172a;
+  margin: 0 0 10px 0;
+  font-weight: 800;
+}
+
+.modal-description {
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.modal-terminal {
+  margin: 25px 0;
+  padding: 15px;
+  background-color: #f1f5f9;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  color: #0f172a;
+  font-family: monospace;
+  border: 1px solid #cbd5e1;
+}
+
+.close-btn {
+  background-color: #111827;
+  color: #ffffff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
