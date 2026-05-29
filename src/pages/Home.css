@@ -376,3 +376,90 @@ body {
   .header { flex-direction: column; align-items: stretch; }
   .stats-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
 }
+/* ==========================================================================
+   INFINITE HARDWARE MOVING SHOWCASE TRACK
+   ========================================================================== */
+.moving-hardware-showcase {
+  width: 100%;
+  overflow: hidden;
+  background: var(--card-bg);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  padding: 16px 0;
+  margin-bottom: 3.5rem; /* Matches grid's lower spacing footprint */
+  box-shadow: 0 4px 12px rgba(31, 107, 59, 0.04);
+  display: flex;
+  position: relative;
+}
+
+/* Gradient fade masks to make the hardware elements vanish smoothly at borders */
+.moving-hardware-showcase::before,
+.moving-hardware-showcase::after {
+  content: "";
+  height: 100%;
+  width: 60px;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.moving-hardware-showcase::before {
+  left: 0;
+  background: linear-gradient(to right, var(--card-bg), rgba(255, 255, 255, 0));
+}
+
+.moving-hardware-showcase::after {
+  right: 0;
+  background: linear-gradient(to left, var(--card-bg), rgba(255, 255, 255, 0));
+}
+
+/* Flex track running the linear animation continuously */
+.showcase-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 30px;
+  animation: scroll-marquee 25s linear infinite;
+}
+
+/* Pauses movement smoothly when the user places their mouse cursor over it */
+.moving-hardware-showcase:hover .showcase-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Bubble image wrappers matching your hardware category design rules */
+.showcase-bubble-item {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #f7fbf8;
+  border: 3px solid var(--border-soft);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease;
+}
+
+.showcase-bubble-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Gentle pop up effect if a user hovers directly over an active bubble item */
+.showcase-bubble-item:hover {
+  transform: scale(1.12);
+  border-color: var(--orange);
+}
+
+/* Pure mathematical sliding animation wrapper logic */
+@keyframes scroll-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* Slides precisely halfway to seamlessly loop items */
+  }
+}

@@ -25,6 +25,16 @@ const bannerImages = [
   'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80'  
 ];
 
+// Curated live tech assets (Phones, Laptops, PCs) matching your layout aesthetics
+const showcaseImages = [
+  'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&q=80', // Smartphone
+  'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=300&q=80', // Laptop workstation
+  'https://images.unsplash.com/photo-1547082299-de196ea013d6?w=300&q=80', // Desktop PC
+  'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=300&q=80', // Premium laptop
+  'https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=300&q=80', // PC Setup/Monitor
+  'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&q=80', // Apple Macbook
+];
+
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentBanner, setCurrentBanner] = useState(0);
@@ -38,7 +48,6 @@ export default function Home() {
     localStorage.removeItem('userProfile');
     navigate('/login');
   };
-
 
   const [activeUsers, setActiveUsers] = useState(16);
   const [systemPower, setSystemPower] = useState(98.8);
@@ -58,7 +67,6 @@ export default function Home() {
     return () => clearInterval(bannerTimer);
   }, []);
 
-  
   useEffect(() => {
     const statsInterval = setInterval(() => {
       setActiveUsers(() => Math.floor(Math.random() * (19 - 13 + 1)) + 13);
@@ -73,10 +81,9 @@ export default function Home() {
   return (
     <div className="container">
       
-      
       <header className="header animate-fade-down">
         <h1 className="logo">
-<img src={logo} alt="NPH Logo" className="logo-image" /> 
+          <img src={logo} alt="NPH Logo" className="logo-image" /> 
         </h1>
 
         <div className="search-container">
@@ -98,7 +105,6 @@ export default function Home() {
         </div>
       </header>
 
-     
       <section className="hero-banner-container animate-fade-in">
         <div 
           className="hero-banner-slide" 
@@ -141,7 +147,6 @@ export default function Home() {
         </div>
       </section>
 
-    
       <main className="grid">
         {services.map((s, index) => (
           <Link 
@@ -156,6 +161,24 @@ export default function Home() {
           </Link>
         ))}
       </main>
+
+      {/* NEW: Infinite moving hardware showcase bar inserted cleanly right here */}
+      <section className="moving-hardware-showcase animate-fade-in">
+        <div className="showcase-marquee-track">
+          {/* First image array pass */}
+          {showcaseImages.map((url, i) => (
+            <div className="showcase-bubble-item" key={`showcase-1-${i}`}>
+              <img src={url} alt="Hardware Equipment Asset" />
+            </div>
+          ))}
+          {/* Duplicated image array pass to guarantee a perfect seamless infinitely loop */}
+          {showcaseImages.map((url, i) => (
+            <div className="showcase-bubble-item" key={`showcase-2-${i}`}>
+              <img src={url} alt="Hardware Equipment Asset" />
+            </div>
+          ))}
+        </div>
+      </section>
 
       <section className="about-section-wrapper">
         <div className="about-section active-slide-box" key={currentSlide}>
