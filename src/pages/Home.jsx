@@ -101,7 +101,8 @@ export default function Home() {
           <Link to="/setting" className="action-icon-link" title="Settings">⚙️</Link>
           <Link to="/profile" className="action-icon-link" title="Profile">👤 {username}</Link>
           <Link to="/menu" className="action-icon-link" title="Activity Log">📋</Link>
-          <button onClick={handleLogout} className="login-link" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>Logout</button>
+          <Link to="/report" className="action-icon-link" title="Activity Report">📊</Link>
+          <button onClick={handleLogout} className="login-link">Logout</button>
         </div>
       </header>
 

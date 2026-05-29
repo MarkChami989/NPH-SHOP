@@ -14,7 +14,6 @@ export default function Login() {
     e.preventDefault();
     setError('');
 
-    // 1. Validation basic check
     if (!username || !password) {
       setError('⚠️ Please enter both your username and password.');
       return;
@@ -23,7 +22,6 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // 🚀 2. Fetch API call directly to your real backend server
       const response = await fetch('http://localhost:5000/api/login', {
         method: 'POST',
         headers: {
@@ -42,16 +40,13 @@ export default function Login() {
         throw new Error(data.message || data.error || 'Invalid credentials!');
       }
 
-      // 4. Success Login! Save secure JWT token and baseline session details
       localStorage.setItem('token', data.token);
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('username', username.toLowerCase());
       
-      // --- 🔍 CONDITIONAL IF/ELSE PROFILE LOCK ---
       const existingProfile = localStorage.getItem('userProfile');
       
       if (existingProfile) {
-        // ✅ ELSE: Deja moujoud! Mafi creation men jdid abadan.
         const updatedProfile = {
           id: data.user?.username || username.toLowerCase(),
           email: data.user?.email || '',
@@ -64,8 +59,6 @@ export default function Login() {
         // Byirja3 deghre 3al main dashboard node perfectly.
         navigate('/');
       } else {
-        // 🆕 IF: Fresh account with NO profile!
-        // Bnikhla2 l-profile instantly ma3 l-Username wl Password li halla2 katabhon!
         const newUserAccount = {
           username: username.toLowerCase(),
           password: password 
@@ -79,16 +72,13 @@ export default function Login() {
           wishlistCount: data.user?.wishlistCount || 0
         };
 
-        // Save both objects instantly to cache storage so Profile.jsx can read them
         localStorage.setItem('userAccount', JSON.stringify(newUserAccount));
         localStorage.setItem('userProfile', JSON.stringify(forcedBlankProfile));
         
-        // Redirect straight to profile setup so they can see their credentials and fill the rest
         navigate('/profile?forcedSetup=true');
       }
 
     } catch (err) {
-      // Show database / validation error live on screen banner
       console.error("Backend Connection Error:", err);
       setError(`❌ ${err.message || 'Connection Error! Make sure your Node.js server is running.'}`);
     } finally {
@@ -100,19 +90,18 @@ export default function Login() {
     <div className="login-page-wrapper animate-fade-in">
       <div className="login-card-container">
         
-        {/* Brand Terminal Header */}
         <div className="login-brand-header">
           <h1 className="login-logo">🛒 NPH SHOP</h1>
           <p className="login-subtitle">Management System Terminal Access</p>
         </div>
 
-        {/* Error Notification Alert Banner */}
+
         {error && <div className="login-error-banner">{error}</div>}
 
         {/* Core Input Credentials Fields */}
         <form onSubmit={handleLoginSubmit} className="login-form-element">
           <div className="login-input-group">
-            <label className="login-input-label">Username / اسم المستخدم</label>
+            <label className="login-input-label">Username</label>
             <input 
               type="text" 
               placeholder="Enter your terminal username" 
@@ -125,7 +114,7 @@ export default function Login() {
           </div>
 
           <div className="login-input-group">
-            <label className="login-input-label">Password / كلمة المرور</label>
+            <label className="login-input-label">Password</label>
             <input 
               type="password" 
               placeholder="••••••••" 

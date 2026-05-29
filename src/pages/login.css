@@ -195,3 +195,20 @@
 .login-signin-action-btn:hover {
   background-color: var(--green-deep);
 }
+.logout {
+  color: #2e7d32;        /* أخضر متل لون اللوغو */
+}
+
+/* أو إذا بدك خلفية خضرا وخط أبيض: */
+.logout {
+  background-color: #2e7d32;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background-color: #1b5e20;   /* أخضر أغمق وقت تمرّر عليه */
+}

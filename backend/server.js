@@ -1,6 +1,6 @@
 const express = require('express');
-const cors = require('cors');
-const pool = require('./db');
+const cors    = require('cors');
+const pool    = require('./db');
 
 const app = express();
 
@@ -403,6 +403,80 @@ app.get('/api/report/:username', async (req, res) => {
   } catch (err) {
     console.error('❌ User report fetch error:', err.message);
     res.status(500).json({ success: false, error: 'Server error retrieving user activity.' });
+  }
+});
+
+// =========================================================================
+// 🖨️ ROUTE 12: COMMIT PRINT JOB TO MYSQL (POST) + AUTO ACTIVITY LOG
+// =========================================================================
+app.post('/api/printing', async (req, res) => {
+  const { username, jobType, paperSize, pages, cost } = req.body;
+
+  if (!username || !jobType || !paperSize || !pages || cost === undefined) {
+    return res.status(400).json({ success: false, error: '⚠️ Missing fields.' });
+  }
+
+  try {
+    const conn = await pool.getConnection();
+
+    const [userCheck] = await conn.execute(
+      'SELECT id FROM users WHERE username = ?',
+      [username.toLowerCase().trim()]
+    );
+
+    if (userCheck.length === 0) {
+      conn.release();
+      return res.status(401).json({ success: false, error: '❌ User not found.' });
+    }
+
+    const [countRows] = await conn.execute('SELECT COUNT(*) AS total FROM print_jobs');
+    const jobId = `NPH-PRT-${String(countRows[0].total + 1).padStart(4, '0')}`;
+
+    await conn.execute(
+      'INSERT INTO print_jobs (job_id, username, job_type, paper_size, pages, cost, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [jobId, username.toLowerCase().trim(), jobType, paperSize, parseInt(pages), parseFloat(cost), 'Completed']
+    );
+
+    await conn.execute(
+      'INSERT INTO terminal_activities (username, type, details, target, status) VALUES (?, ?, ?, ?, ?)',
+      [username.toLowerCase().trim(), 'Printing', `${jobType} ${paperSize} — ${pages} pg — $${parseFloat(cost).toFixed(2)}`, 'Print Station', 'success']
+    );
+
+    conn.release();
+
+    console.log('----------------------------------------------------');
+    console.log(`🖨️ [${jobId}] ${jobType} ${paperSize} ${pages}pg $${cost} by ${username}`);
+    console.log('----------------------------------------------------');
+
+    res.json({ success: true, jobId });
+
+  } catch (err) {
+    console.error('❌ Print Job DB Error:', err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// =========================================================================
+// 📋 ROUTE 13: GET PRINT ORDER HISTORY BY USERNAME (GET)
+// =========================================================================
+app.get('/api/printing/orders/:username', async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const conn = await pool.getConnection();
+
+    const [orders] = await conn.execute(
+      'SELECT * FROM print_jobs WHERE username = ? ORDER BY created_at DESC',
+      [username.toLowerCase()]
+    );
+
+    conn.release();
+
+    res.json({ success: true, orders });
+
+  } catch (err) {
+    console.error('❌ Fetch print orders error:', err.message);
+    res.status(500).json({ success: false, error: '❌ Server error fetching print order history.' });
   }
 });
 

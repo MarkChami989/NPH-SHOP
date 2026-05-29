@@ -52,3 +52,15 @@ CREATE TABLE terminal_activities (
     status VARCHAR(50) DEFAULT 'success',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DROP TABLE IF EXISTS print_jobs;
+CREATE TABLE print_jobs (
+  id         INT AUTO_INCREMENT PRIMARY KEY,
+  job_id     VARCHAR(20)  NOT NULL,
+  username   VARCHAR(100) NOT NULL,
+  job_type   VARCHAR(50)  NOT NULL,
+  paper_size VARCHAR(5)   NOT NULL DEFAULT 'A4',
+  pages      INT          NOT NULL,
+  cost       DECIMAL(8,2) NOT NULL DEFAULT 0.00,
+  status     VARCHAR(50)  DEFAULT 'Completed',
+  created_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
